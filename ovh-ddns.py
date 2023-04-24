@@ -11,7 +11,7 @@ logging.basicConfig(handlers=[logging.FileHandler(filename="/var/log/ovh-ddns.lo
                                                  encoding='utf-8', mode='a+')],
                     format="%(asctime)s %(name)s:%(levelname)s:%(message)s", 
                     datefmt="%F %A %T", 
-                    level=logging.INFO)
+                    level=logging.DEBUG)
 
 ## Updates the OVH DNS record value to be the new public IP address of the server
 def update_ovh(data):
