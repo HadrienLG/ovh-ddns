@@ -34,7 +34,7 @@ def update_ovh(data):
             ttl         = data["dns_record_ttl"]
         )
     except Exception as e:
-        logging.warn("Unable to update OVH DNS record")
+        logging.warning("Unable to update OVH DNS record")
         logging.info("Try running setup.sh again")
         logging.debug(e)
         return
@@ -48,16 +48,16 @@ def update_local_data_store(data):
     try:
         file = open(data_file_path, "w")
     except:
-        print("Unable to locate ovh-ddns.json")
+        logging.warning("Unable to locate ovh-ddns.json")
     else:
         data["first_time"] = False
 
         try:
             file.write(json.dumps(data))
             file.close()
-            print("Updated old IP")
+            logging.debug("Updated old IP")
         except Exception as e:
-            print(e)
+            logging.warning(e)
 
 
 ## Reads ovh-ddns.json file and gets current public IP
@@ -75,7 +75,7 @@ def main():
         logging.debug('...chargement des données locales effectué')
         old_ip = data["ip"]
     except FileNotFoundError:
-        logging.warn('Echec du chargement des données locales')
+        logging.warning('Echec du chargement des données locales')
         print("Data file not found. Run the setup.sh script first.")
     else:
         # Poursuite du script avec la mise à jour de l'adresse IP si nécessaire
@@ -86,14 +86,14 @@ def main():
                 current_ip = res.text
                 logging.info(f'Adresse IP courante {current_ip} depuis IPIFY.org')
             else:
-                logging.warn(f'Erreur lors obtention IP depuis depuis IPIFY.org')
+                logging.warning(f'Erreur lors obtention IP depuis depuis IPIFY.org')
                 # API ipapi.co
                 res = get('https://ipapi.co/json/')
                 if res.status_code == 200:
                     current_ip = res.json()['ip']
                     logging.info(f'Adresse IP courante {current_ip} depuis IPAPI.co')
                 else:
-                    logging.warn(f'Erreur lors obtention IP depuis depuis IPAPI.org')
+                    logging.warning(f'Erreur lors obtention IP depuis depuis IPAPI.org')
 
             if current_ip != old_ip:
                 logging.info("IP change detected")
@@ -107,7 +107,7 @@ def main():
                 logging.info(f"No IP change detected, IP is {current_ip}")
 
         except:
-            logging.warn("Unable to retrieve public IP address")
+            logging.warning("Unable to retrieve public IP address")
 
 
 if __name__ == "__main__":
