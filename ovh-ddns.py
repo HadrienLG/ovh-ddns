@@ -3,8 +3,15 @@ import ovh
 from requests import get
 import logging
 
+# Fichier de paramètres
 data_file_path = "/usr/local/sbin/ovh-ddns.json"
-logging.basicConfig(filename="/var/log/ovh-ddns.log", encoding='utf-8', level=logging.DEBUG)
+
+# Fichier de journalisation
+logging.basicConfig(handlers=[logging.FileHandler(filename="/var/log/ovh-ddns.log", 
+                                                 encoding='utf-8', mode='a+')],
+                    format="%(asctime)s %(name)s:%(levelname)s:%(message)s", 
+                    datefmt="%F %A %T", 
+                    level=logging.INFO)
 
 ## Updates the OVH DNS record value to be the new public IP address of the server
 def update_ovh(data):
